@@ -4,6 +4,7 @@ import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.util.Random;
 
+import Game.Gfx.AnimatedTile;
 import Game.Gfx.SpriteSheet;
 import Game.World.Level;
 import Game.World.Tile.TileType;
@@ -36,7 +37,11 @@ public class LevelGenerator
 			{	
 				if(randomNumber%flowerTileChance == 0)
 				{
-					Level.tiles[i][j] = blockSpriteSheet.tiles[0][1];
+					Level.tiles[i][j] = blockSpriteSheet.tiles[1][0];
+				}
+				else if(randomNumber%15 == 0)
+				{
+					Level.tiles[i][j] = AnimatedTile.water;
 				}
 				else
 				{
@@ -64,7 +69,7 @@ public class LevelGenerator
 		int counterSinceLastTurn = 0;
 		int turnRandomizer = generator.nextInt(6) + 4;
 		
-		Level.tiles[0][startingRoadIndex] = blockSpriteSheet.tiles[0][2];
+		Level.tiles[0][startingRoadIndex] = blockSpriteSheet.tiles[2][0];
 		Level.tiles[0][startingRoadIndex].setType(TileType.Spawn);
 		
 		while(!endRoadPlaced)
@@ -76,26 +81,26 @@ public class LevelGenerator
 				switch(direction)
 				{
 					case 0:
-						Level.tiles[currentX][currentY] = blockSpriteSheet.tiles[0][6];
+						Level.tiles[currentX][currentY] = blockSpriteSheet.tiles[6][0];
 						currentX++;
 						direction = 1;
 						break;
 					case 1:
 						if(currentY <= 5)
 						{
-							Level.tiles[currentX][currentY] = blockSpriteSheet.tiles[0][3];
+							Level.tiles[currentX][currentY] = blockSpriteSheet.tiles[3][0];
 							currentY++;
 							direction = 2;
 						}
 						else
 						{
-							Level.tiles[currentX][currentY] = blockSpriteSheet.tiles[0][5];
+							Level.tiles[currentX][currentY] = blockSpriteSheet.tiles[5][0];
 							currentY--;
 							direction = 0;
 						}
 						break;
 					case 2:
-						Level.tiles[currentX][currentY] = blockSpriteSheet.tiles[0][7];
+						Level.tiles[currentX][currentY] = blockSpriteSheet.tiles[7][0];
 						currentX++;
 						direction = 1;
 						break;
@@ -106,15 +111,15 @@ public class LevelGenerator
 				switch(direction)
 				{
 					case 0:
-						Level.tiles[currentX][currentY] = blockSpriteSheet.tiles[0][4];
+						Level.tiles[currentX][currentY] = blockSpriteSheet.tiles[4][0];
 						currentY--;
 						break;
 					case 1:
-						Level.tiles[currentX][currentY] = blockSpriteSheet.tiles[0][2];
+						Level.tiles[currentX][currentY] = blockSpriteSheet.tiles[2][0];
 						currentX++;
 						break;
 					case 2:
-						Level.tiles[currentX][currentY] = blockSpriteSheet.tiles[0][4];
+						Level.tiles[currentX][currentY] = blockSpriteSheet.tiles[4][0];
 						currentY++;
 						break;
 				}

@@ -1,6 +1,9 @@
 package Game.Entity;
 
+import java.awt.Graphics;
+
 import Game.Application;
+import Game.World.Level;
 import Game.World.Position;
 
 public class Tower extends Entity
@@ -87,7 +90,7 @@ public class Tower extends Entity
 		
 	}
 	
-	public void attackEnemy()
+	public void render(Graphics g)
 	{
 		
 	}
@@ -99,7 +102,7 @@ public class Tower extends Entity
 		tower = PremadeTowers.values()[id].getTower();
 		tower.setPosition(new Position(x,y));
 		
-		Application.getLevel().addTower(tower);;
+		Level.addTower(tower);;
 	}
 	
 	public static enum PremadeTowers

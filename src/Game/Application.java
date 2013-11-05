@@ -11,7 +11,10 @@ import java.awt.image.DataBufferInt;
 
 import javax.swing.JFrame;
 
+import Game.Entity.Enemy;
 import Game.Entity.Player;
+import Game.Entity.Tower;
+import Game.Gfx.AnimatedTile;
 import Game.Gfx.SpriteSheet;
 import Game.World.Level;
 
@@ -142,14 +145,23 @@ public class Application extends Canvas implements Runnable
 	{
 		tickCount++;
 		
-		level.getPlayer().tick();
+		Level.getPlayer().tick();
 		
-		/*
-		for(int i = 0; i < pixels.length; i++)
+		for(AnimatedTile i : AnimatedTile.animatedTiles)
 		{
-			pixels[i] = i + tickCount;
+			i.tick();
 		}
-		*/
+		
+		for(Enemy e : Level.enemies)
+		{
+			e.tick();
+		}
+		
+		for(Tower t : Level.towers)
+		{
+			t.tick();
+		}
+		
 	}
 	
 	public void render()
@@ -166,7 +178,19 @@ public class Application extends Canvas implements Runnable
 		g.setColor(Color.BLACK);
 		g.fillRect(0, 0, getWidth(), getHeight());
 		
-		level.render(g);
+		Level.getPlayer().render(g);
+		
+		Level.render(g);
+		
+		for(Enemy e : Level.enemies)
+		{
+			e.render(g);
+		}
+		
+		for(Tower t : Level.towers)
+		{
+			t.render(g);
+		}
 		
 		g.dispose();
 		bs.show();

@@ -16,8 +16,8 @@ public class Level
 	private static final int tileSize = 32;
 	
 	private static Player player;
-	private static List<Tower> towers = new ArrayList<Tower>();
-	private static List<Enemy> enemies = new ArrayList<Enemy>();
+	public static List<Tower> towers = new ArrayList<Tower>();
+	public static List<Enemy> enemies = new ArrayList<Enemy>();
 	public static Position enemySpawnPoint;
 	public static Tile[][] tiles;
 	public static Wave[] waves;
@@ -32,7 +32,7 @@ public class Level
 	
 	/* START setters and getters */
 	
-	public Player getPlayer()
+	public static Player getPlayer()
 	{
 		return player;
 	}

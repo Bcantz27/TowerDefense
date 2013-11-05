@@ -1,5 +1,7 @@
 package Game.Entity;
 
+import java.awt.Graphics;
+
 import Game.Application;
 import Game.Entity.Tower.DamageTypes;
 
@@ -40,6 +42,11 @@ public class Enemy extends Entity
 	/* END setters and getters */
 	
 	public void tick()
+	{
+		
+	}
+	
+	public void render(Graphics g)
 	{
 		
 	}
