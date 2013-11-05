@@ -1,11 +1,12 @@
 package Game.Engine;
 
-public class InputManager 
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+
+public class InputManager implements KeyListener
 {
-	public static void handleInput(String string)
-	{
-		//InteractionPanel.sendMessage("Input: "+string);
-		
+	public void handleCommand(String string)
+	{		
 		String[] args = new String[10];
 		int counter = 0;
 		
@@ -25,5 +26,23 @@ public class InputManager
 				counter++;
 			}
 		}
+	}
+
+	@Override
+	public void keyPressed(KeyEvent arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void keyReleased(KeyEvent arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void keyTyped(KeyEvent arg0) {
+		// TODO Auto-generated method stub
+		
 	}
 }

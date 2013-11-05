@@ -6,6 +6,7 @@ import java.util.Random;
 
 import Game.Gfx.SpriteSheet;
 import Game.World.Level;
+import Game.World.Tile.TileType;
 
 public class LevelGenerator 
 {
@@ -35,7 +36,7 @@ public class LevelGenerator
 			{	
 				if(randomNumber%flowerTileChance == 0)
 				{
-					Level.tiles[i][j] = blockSpriteSheet.tiles[1][0];
+					Level.tiles[i][j] = blockSpriteSheet.tiles[0][1];
 				}
 				else
 				{
@@ -61,9 +62,10 @@ public class LevelGenerator
 		
 		boolean canTurn = true;
 		int counterSinceLastTurn = 0;
-		int turnRandomizer = generator.nextInt(5) + 3;
+		int turnRandomizer = generator.nextInt(6) + 4;
 		
-		Level.tiles[0][startingRoadIndex] = blockSpriteSheet.tiles[2][0];
+		Level.tiles[0][startingRoadIndex] = blockSpriteSheet.tiles[0][2];
+		Level.tiles[0][startingRoadIndex].setType(TileType.Spawn);
 		
 		while(!endRoadPlaced)
 		{
@@ -74,26 +76,26 @@ public class LevelGenerator
 				switch(direction)
 				{
 					case 0:
-						Level.tiles[currentX][currentY] = blockSpriteSheet.tiles[6][0];
+						Level.tiles[currentX][currentY] = blockSpriteSheet.tiles[0][6];
 						currentX++;
 						direction = 1;
 						break;
 					case 1:
-						if(currentY <=5)
+						if(currentY <= 5)
 						{
-							Level.tiles[currentX][currentY] = blockSpriteSheet.tiles[3][0];
+							Level.tiles[currentX][currentY] = blockSpriteSheet.tiles[0][3];
 							currentY++;
 							direction = 2;
 						}
 						else
 						{
-							Level.tiles[currentX][currentY] = blockSpriteSheet.tiles[5][0];
+							Level.tiles[currentX][currentY] = blockSpriteSheet.tiles[0][5];
 							currentY--;
 							direction = 0;
 						}
 						break;
 					case 2:
-						Level.tiles[currentX][currentY] = blockSpriteSheet.tiles[7][0];
+						Level.tiles[currentX][currentY] = blockSpriteSheet.tiles[0][7];
 						currentX++;
 						direction = 1;
 						break;
@@ -104,15 +106,15 @@ public class LevelGenerator
 				switch(direction)
 				{
 					case 0:
-						Level.tiles[currentX][currentY] = blockSpriteSheet.tiles[4][0];
+						Level.tiles[currentX][currentY] = blockSpriteSheet.tiles[0][4];
 						currentY--;
 						break;
 					case 1:
-						Level.tiles[currentX][currentY] = blockSpriteSheet.tiles[2][0];
+						Level.tiles[currentX][currentY] = blockSpriteSheet.tiles[0][2];
 						currentX++;
 						break;
 					case 2:
-						Level.tiles[currentX][currentY] = blockSpriteSheet.tiles[4][0];
+						Level.tiles[currentX][currentY] = blockSpriteSheet.tiles[0][4];
 						currentY++;
 						break;
 				}
@@ -124,16 +126,16 @@ public class LevelGenerator
 
 				if(counterSinceLastTurn > turnRandomizer)
 				{
-					System.out.println("Can Turn");
 					counterSinceLastTurn = 0;
 					canTurn = true;
 				}
 				
-				turnRandomizer = generator.nextInt(5) + 3;
+				turnRandomizer = generator.nextInt(6) + 4;
 			}
 			
 			if(currentX >= Level.tiles.length)
 			{
+				Level.tiles[currentX-1][currentY].setType(TileType.End);
 				endRoadPlaced = true;
 			}
 		}

@@ -30,8 +30,6 @@ public class Application extends Canvas implements Runnable
 	
 	private static int tickCount = 0;
 	
-	private BufferedImage background = new BufferedImage(WIDTH,HEIGHT, BufferedImage.TYPE_INT_RGB);
-	
 	protected Application()
 	{
 		level = new Level("Player 1");

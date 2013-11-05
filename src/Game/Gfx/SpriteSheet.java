@@ -27,7 +27,6 @@ public class SpriteSheet
 		try {
 			image = ImageIO.read(SpriteSheet.class.getResourceAsStream(path));
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
@@ -57,7 +56,7 @@ public class SpriteSheet
 		{
 			for(int j = 0; j < width/tileSize ; j++)
 			{
-				tiles[i][j] = new Tile(i,image.getSubimage(i*tileSize, j*tileSize, tileSize, tileSize));
+				tiles[i][j] = new Tile(i,image.getSubimage(j*tileSize, i*tileSize, tileSize, tileSize));
 			}
 		}
 	}
