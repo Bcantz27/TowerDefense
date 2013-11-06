@@ -5,8 +5,6 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
-import Game.World.Tile;
-
 public class SpriteSheet
 {
 	

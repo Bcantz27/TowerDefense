@@ -10,6 +10,7 @@ import Game.Entity.Player;
 import Game.Entity.Tower;
 import Game.Generators.LevelGenerator;
 import Game.Gfx.SpriteSheet;
+import Game.Gfx.Tile;
 
 public class Level 
 {

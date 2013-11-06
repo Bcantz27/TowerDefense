@@ -6,8 +6,8 @@ import java.util.Random;
 
 import Game.Gfx.AnimatedTile;
 import Game.Gfx.SpriteSheet;
+import Game.Gfx.Tile.TileType;
 import Game.World.Level;
-import Game.World.Tile.TileType;
 
 public class LevelGenerator 
 {
@@ -41,7 +41,7 @@ public class LevelGenerator
 				}
 				else if(randomNumber%15 == 0)
 				{
-					Level.tiles[i][j] = AnimatedTile.water;
+					Level.tiles[i][j] = AnimatedTile.bush;
 				}
 				else
 				{

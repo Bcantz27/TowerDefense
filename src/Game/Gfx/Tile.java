@@ -1,4 +1,4 @@
-package Game.World;
+package Game.Gfx;
 
 import java.awt.image.BufferedImage;
 
@@ -31,7 +31,7 @@ public class Tile
 	{
 		return type;
 	}
-	
+
 	public void setId(int id)
 	{
 		this.id = id;

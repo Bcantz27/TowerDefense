@@ -1,14 +1,23 @@
 package Game.Entity;
 
 import java.awt.Graphics;
+import java.awt.image.BufferedImage;
+import java.util.ArrayList;
+import java.util.List;
 
 import Game.Application;
 import Game.Entity.Tower.DamageTypes;
+import Game.Gfx.Animation;
+import Game.World.Level;
 
 public class Enemy extends Entity
 {
 	private int speed;
 	private int health;
+	
+	private BufferedImage currentImage;
+	
+	private List<Animation> animations = new ArrayList<Animation>();
 	
 	public Enemy(String newName, int newId, int newX, int newY,int health,int speed) 
 	{
@@ -29,6 +38,11 @@ public class Enemy extends Entity
 		return health;
 	}
 	
+	public BufferedImage getImage()
+	{
+		return currentImage;
+	}
+	
 	public void setSpeed(int speed)
 	{
 		this.speed = speed;
@@ -43,12 +57,18 @@ public class Enemy extends Entity
 	
 	public void tick()
 	{
-		
+		for(Animation a : animations)
+		{
+			if(a.getPlaying())
+			{
+				currentImage = a.getCurrentImage();
+			}
+		}
 	}
 	
 	public void render(Graphics g)
 	{
-		
+		g.drawImage(currentImage, position.getX(), position.getY(), currentImage.getWidth(), currentImage.getHeight(), null);
 	}
 	
 	public static void spawnEnemy(int id)
@@ -56,9 +76,9 @@ public class Enemy extends Entity
 		Enemy e;
 		
 		e = PremadeEnemies.values()[id].getEnemy();
-		e.setPosition(Application.getLevel().enemySpawnPoint);
+		e.setPosition(Level.enemySpawnPoint);
 		
-		Application.getLevel().addEnemy(e);
+		Level.addEnemy(e);
 		
 	}
 	

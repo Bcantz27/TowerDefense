@@ -1,11 +1,16 @@
 package Game.Entity;
 
 import java.awt.Graphics;
+import java.awt.image.BufferedImage;
+import java.util.ArrayList;
+import java.util.List;
+
+import Game.Gfx.Animation;
 
 public class Player extends Entity 
 {
-	private static int STARTING_LIVES = 100;
-	private static int STARTING_GOLD = 500;
+	private static final int STARTING_LIVES = 100;
+	private static final int STARTING_GOLD = 500;
 	
 	private int lives;
 	private int gold;
@@ -55,11 +60,13 @@ public class Player extends Entity
 	
 	public void tick()
 	{
-		
+
 	}
 	
 	public void render(Graphics g)
 	{
 		
 	}
+	
+	
 }

@@ -1,8 +1,12 @@
 package Game.Entity;
 
 import java.awt.Graphics;
+import java.awt.image.BufferedImage;
+import java.util.ArrayList;
+import java.util.List;
 
 import Game.Application;
+import Game.Gfx.Animation;
 import Game.World.Level;
 import Game.World.Position;
 
@@ -14,6 +18,12 @@ public class Tower extends Entity
 	private float range;
 	private float attackSpeed;
 	private DamageTypes damageType;
+	
+	private BufferedImage currentImage;
+	
+	private List<Animation> animations = new ArrayList<Animation>();
+	
+	private Tower upgrade;
 	
 	public Tower(String newName, int newId, int newX, int newY, int cost, int damage, DamageTypes type, int range, int attackSpeed, int health)
 	{
@@ -46,6 +56,11 @@ public class Tower extends Entity
 	public float getRange()
 	{
 		return range;
+	}
+	
+	public BufferedImage getImage()
+	{
+		return currentImage;
 	}
 	
 	public float getAttackSpeed()
@@ -87,12 +102,18 @@ public class Tower extends Entity
 	
 	public void tick()
 	{
-		
+		for(Animation a : animations)
+		{
+			if(a.getPlaying())
+			{
+				currentImage = a.getCurrentImage();
+			}
+		}
 	}
 	
 	public void render(Graphics g)
 	{
-		
+		g.drawImage(currentImage, position.getX(), position.getY(), currentImage.getWidth(), currentImage.getHeight(), null);
 	}
 	
 	public static void createTowerAtPos(int id, int x, int y)

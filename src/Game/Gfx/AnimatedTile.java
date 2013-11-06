@@ -7,12 +7,11 @@ import java.util.List;
 
 import javax.imageio.ImageIO;
 
-import Game.World.Tile;
-
 public class AnimatedTile extends Tile
 {
 	public static List<AnimatedTile> animatedTiles = new ArrayList<AnimatedTile>();
 	public static final AnimatedTile water =  new AnimatedTile("/AnimatedTiles/Water.png", 16, 1500);
+	public static final AnimatedTile bush =  new AnimatedTile("/AnimatedTiles/Bush.png", 16, 2000);
 	
 	private String path;
 	private int tileSize;
@@ -62,7 +61,6 @@ public class AnimatedTile extends Tile
 	
 	private void loadFrames(BufferedImage image)
 	{
-		System.out.println("Frames: " + image.getWidth()/tileSize);
 		for(int i = 0; i < image.getWidth()/tileSize;i++)
 		{
 			frame[i] = image.getSubimage(i*tileSize, 0, tileSize, tileSize);
