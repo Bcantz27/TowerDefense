@@ -1,11 +1,7 @@
 package Game.Entity;
 
 import java.awt.Graphics;
-import java.awt.image.BufferedImage;
-import java.util.ArrayList;
-import java.util.List;
 
-import Game.Gfx.Animation;
 
 public class Player extends Entity 
 {

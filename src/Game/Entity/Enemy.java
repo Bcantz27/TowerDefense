@@ -2,13 +2,21 @@ package Game.Entity;
 
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.imageio.ImageIO;
+
 import Game.Application;
 import Game.Entity.Tower.DamageTypes;
+import Game.Gfx.AnimatedTile;
 import Game.Gfx.Animation;
+import Game.Gfx.Animator;
+import Game.Gfx.Tile;
+import Game.Gfx.Tile.TileType;
 import Game.World.Level;
+import Game.World.Position;
 
 public class Enemy extends Entity
 {
@@ -17,18 +25,22 @@ public class Enemy extends Entity
 	
 	private BufferedImage currentImage;
 	
-	private List<Animation> animations = new ArrayList<Animation>();
+	private Animator animator = new Animator(2);
+	// 0 = Idle
+	// 1 = Walk
 	
 	public Enemy(String newName, int newId, int newX, int newY,int health,int speed) 
 	{
 		super(newName, newId, newX, newY);
+		
 		this.health = health;
 		this.speed = speed;
+
 	}
 	
 	/* START setters and getters */
 	
-	public int getSpeed()
+	public float getSpeed()
 	{
 		return speed;
 	}
@@ -57,40 +69,32 @@ public class Enemy extends Entity
 	
 	public void tick()
 	{
-		for(Animation a : animations)
-		{
-			if(a.getPlaying())
-			{
-				currentImage = a.getCurrentImage();
-			}
-		}
+		currentImage = animator.getCurrentAnimation().getCurrentFrame();
 	}
 	
 	public void render(Graphics g)
 	{
-		g.drawImage(currentImage, position.getX(), position.getY(), currentImage.getWidth(), currentImage.getHeight(), null);
+		g.drawImage(currentImage, position.getTileX(), position.getTileY(), currentImage.getWidth(), currentImage.getHeight(), null);
 	}
 	
-	public static void spawnEnemy(int id)
+	public void walk()
 	{
-		Enemy e;
-		
-		e = PremadeEnemies.values()[id].getEnemy();
-		e.setPosition(Level.enemySpawnPoint);
-		
-		Level.addEnemy(e);
 		
 	}
-	
+
 	public static enum PremadeEnemies
 	{
 		Rat{
 			@Override
 			public Enemy getEnemy()
 			{
-				return new Enemy("Rat", 0, 0, 0, 10, 3);
+				e = new Enemy("Rat", 0, 0, 0, 10, 2);
+				e.animator.loadAnimation("Walk","/Animations/Mobs/Rat/walk.png", 500);
+				return e;
 			}
 		};
+		
+		Enemy e = null;
 		
 		public abstract Enemy getEnemy();
 	}

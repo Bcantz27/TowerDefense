@@ -8,13 +8,15 @@ import Game.Application;
 import Game.Entity.Enemy;
 import Game.Entity.Player;
 import Game.Entity.Tower;
+import Game.Entity.Enemy.PremadeEnemies;
+import Game.Entity.Tower.PremadeTowers;
 import Game.Generators.LevelGenerator;
 import Game.Gfx.SpriteSheet;
 import Game.Gfx.Tile;
 
 public class Level 
 {
-	private static final int tileSize = 32;
+	public static final int tileSize = 32;
 	
 	private static Player player;
 	public static List<Tower> towers = new ArrayList<Tower>();
@@ -66,12 +68,38 @@ public class Level
 		}
 	}
 	
-	public static void addTower(Tower t)
+	public static void spawnEnemy(int id, int x, int y)
+	{
+		Enemy e;
+		
+		e = PremadeEnemies.values()[id].getEnemy();
+		e.setPosition(new Position(x,y));
+		
+		addEnemy(e);
+		
+	}
+	
+	public static void spawnTower(int id, int x, int y)
+	{
+		Tower tower;
+
+		tower = PremadeTowers.values()[id].getTower();
+		tower.setPosition(new Position(x,y));
+		
+		addTower(tower);;
+	}
+	
+	public static Tile getTileAtPos(int x, int y)
+	{
+		return tiles[x][y];
+	}
+	
+	private static void addTower(Tower t)
 	{
 		towers.add(t);
 	}
 	
-	public static void addEnemy(Enemy e)
+	private static void addEnemy(Enemy e)
 	{
 		enemies.add(e);
 	}

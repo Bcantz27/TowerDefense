@@ -7,6 +7,7 @@ import javax.imageio.ImageIO;
 
 public class Animation 
 {
+	private String name;
 	private String path;
 	private int tileSize;
 	private BufferedImage[] frame;
@@ -16,17 +17,17 @@ public class Animation
 	private int animationDelay;
 	
 	private boolean playing;
-	private boolean loop;
 	
-	public Animation(String path, int tileSize,int delay)
+	public Animation(String name, String path, int tileSize,int delay)
 	{
 		BufferedImage image = null;
+		
+		this.name = name;
 		this.tileSize = tileSize;
 		currentAnimationIndex = 0;
 		animationDelay = delay;
 		lastInterationTime = System.currentTimeMillis();
 		playing = false;
-		loop = false;
 		
 		try {
 			image = ImageIO.read(AnimatedTile.class.getResourceAsStream(path));
@@ -52,14 +53,30 @@ public class Animation
 		return playing;
 	}
 	
-	public boolean getLooping()
+	public String getName()
 	{
-		return loop;
+		if(name == null)
+		{
+			name = "No Name";
+		}
+		return name;
 	}
 	
-	public BufferedImage getCurrentImage()
+	public String getPath()
 	{
-		return frame[currentAnimationIndex];
+		return path;
+	}
+	
+	public BufferedImage getCurrentFrame()
+	{
+		if(frame[currentAnimationIndex] == null)
+		{
+			return frame[0];
+		}
+		else
+		{
+			return frame[currentAnimationIndex];
+		}
 	}
 	
 	public void setPlaying(boolean playing)
@@ -67,20 +84,14 @@ public class Animation
 		this.playing = playing;
 	}
 	
-	public void setLooping(boolean looping)
-	{
-		this.loop = looping;
-	}
-	
 	/* END getters and setters */
 	
 	public void play(boolean loop)
 	{
-		this.loop = loop;
-		
+		playing = true;
 		if(playing)
 		{
-			if(this.loop)
+			if(loop)
 			{
 				if((System.currentTimeMillis() - lastInterationTime) >= animationDelay)
 				{

@@ -2,8 +2,8 @@ package Game.World;
 
 public class Position 
 {
-	private int x = 0;
-	private int y = 0;
+	private float x = 0;
+	private float y = 0;
 	
 	public Position()
 	{
@@ -11,7 +11,7 @@ public class Position
 		y = 0;
 	}
 	
-	public Position(int newX, int newY)
+	public Position(float newX, float newY)
 	{
 		x = newX;
 		y = newY;
@@ -19,17 +19,27 @@ public class Position
 	
 	/* START Setters and Getters */
 	
-	public int getX()
+	public float getX()
 	{
 		return x;
 	}
 	
-	public int getY()
+	public float getY()
 	{
 		return y;
 	}
 	
-	public void setPosition(int newX, int newY)
+	public int getTileX()
+	{
+		return (int) (x/Level.tileSize);
+	}
+	
+	public int getTileY()
+	{
+		return (int) (y/Level.tileSize);
+	}
+	
+	public void setPosition(float newX, float newY)
 	{
 		x = newX;
 		y = newY;
@@ -37,7 +47,7 @@ public class Position
 	
 	/* END Setters and Getters */
 	
-	public void shiftPosition(int shiftX, int shiftY)
+	public void shiftPosition(float shiftX, float shiftY)
 	{
 		x += shiftX;
 		y += shiftY;

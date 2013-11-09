@@ -15,6 +15,7 @@ import Game.Entity.Enemy;
 import Game.Entity.Player;
 import Game.Entity.Tower;
 import Game.Gfx.AnimatedTile;
+import Game.Gfx.Animation;
 import Game.Gfx.SpriteSheet;
 import Game.World.Level;
 
@@ -54,6 +55,8 @@ public class Application extends Canvas implements Runnable
 		
 		frame.add(this, BorderLayout.CENTER);
 		frame.pack();
+		
+		Level.spawnEnemy(0, Level.enemySpawnPoint.getTileX(),Level.enemySpawnPoint.getTileY());
 	}
 	
 	/* START setters and getters */
@@ -160,6 +163,11 @@ public class Application extends Canvas implements Runnable
 		for(Tower t : Level.towers)
 		{
 			t.tick();
+		}
+		
+		for(Enemy e : Level.enemies)
+		{
+			e.walk();
 		}
 		
 	}

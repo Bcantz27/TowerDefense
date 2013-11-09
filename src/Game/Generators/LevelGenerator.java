@@ -8,6 +8,7 @@ import Game.Gfx.AnimatedTile;
 import Game.Gfx.SpriteSheet;
 import Game.Gfx.Tile.TileType;
 import Game.World.Level;
+import Game.World.Position;
 
 public class LevelGenerator 
 {
@@ -71,6 +72,7 @@ public class LevelGenerator
 		
 		Level.tiles[0][startingRoadIndex] = blockSpriteSheet.tiles[2][0];
 		Level.tiles[0][startingRoadIndex].setType(TileType.Spawn);
+		Level.enemySpawnPoint = new Position(0,startingRoadIndex*32 + 8);
 		
 		while(!endRoadPlaced)
 		{
@@ -82,6 +84,7 @@ public class LevelGenerator
 				{
 					case 0:
 						Level.tiles[currentX][currentY] = blockSpriteSheet.tiles[6][0];
+						Level.tiles[currentX][currentY].setType(TileType.Road);
 						currentX++;
 						direction = 1;
 						break;
@@ -89,18 +92,21 @@ public class LevelGenerator
 						if(currentY <= 5)
 						{
 							Level.tiles[currentX][currentY] = blockSpriteSheet.tiles[3][0];
+							Level.tiles[currentX][currentY].setType(TileType.Road);
 							currentY++;
 							direction = 2;
 						}
 						else
 						{
 							Level.tiles[currentX][currentY] = blockSpriteSheet.tiles[5][0];
+							Level.tiles[currentX][currentY].setType(TileType.Road);
 							currentY--;
 							direction = 0;
 						}
 						break;
 					case 2:
 						Level.tiles[currentX][currentY] = blockSpriteSheet.tiles[7][0];
+						Level.tiles[currentX][currentY].setType(TileType.Road);
 						currentX++;
 						direction = 1;
 						break;
@@ -112,14 +118,17 @@ public class LevelGenerator
 				{
 					case 0:
 						Level.tiles[currentX][currentY] = blockSpriteSheet.tiles[4][0];
+						Level.tiles[currentX][currentY].setType(TileType.Road);
 						currentY--;
 						break;
 					case 1:
 						Level.tiles[currentX][currentY] = blockSpriteSheet.tiles[2][0];
+						Level.tiles[currentX][currentY].setType(TileType.Road);
 						currentX++;
 						break;
 					case 2:
 						Level.tiles[currentX][currentY] = blockSpriteSheet.tiles[4][0];
+						Level.tiles[currentX][currentY].setType(TileType.Road);
 						currentY++;
 						break;
 				}

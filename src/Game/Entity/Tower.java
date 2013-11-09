@@ -21,8 +21,6 @@ public class Tower extends Entity
 	
 	private BufferedImage currentImage;
 	
-	private List<Animation> animations = new ArrayList<Animation>();
-	
 	private Tower upgrade;
 	
 	public Tower(String newName, int newId, int newX, int newY, int cost, int damage, DamageTypes type, int range, int attackSpeed, int health)
@@ -102,28 +100,12 @@ public class Tower extends Entity
 	
 	public void tick()
 	{
-		for(Animation a : animations)
-		{
-			if(a.getPlaying())
-			{
-				currentImage = a.getCurrentImage();
-			}
-		}
+		
 	}
 	
 	public void render(Graphics g)
 	{
-		g.drawImage(currentImage, position.getX(), position.getY(), currentImage.getWidth(), currentImage.getHeight(), null);
-	}
-	
-	public static void createTowerAtPos(int id, int x, int y)
-	{
-		Tower tower;
-
-		tower = PremadeTowers.values()[id].getTower();
-		tower.setPosition(new Position(x,y));
-		
-		Level.addTower(tower);;
+		g.drawImage(currentImage, position.getTileX(), position.getTileY(), currentImage.getWidth(), currentImage.getHeight(), null);
 	}
 	
 	public static enum PremadeTowers
