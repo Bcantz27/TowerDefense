@@ -1,8 +1,5 @@
 package Game.Entity;
 
-import java.awt.Graphics;
-
-
 public class Player extends Entity 
 {
 	private static final int STARTING_LIVES = 100;
@@ -57,11 +54,6 @@ public class Player extends Entity
 	public void tick()
 	{
 
-	}
-	
-	public void render(Graphics g)
-	{
-		
 	}
 	
 	

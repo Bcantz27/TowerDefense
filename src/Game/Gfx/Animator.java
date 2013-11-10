@@ -29,7 +29,6 @@ public class Animator
 	public void loadAnimation(String name, String path, int delay)
 	{
 		Animation ani = new Animation(name,path,16,delay);
-		
 
 		if(!hasAnimation(name))
 		{

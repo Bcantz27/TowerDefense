@@ -23,9 +23,9 @@ public class Application extends Canvas implements Runnable
 {
 	private static final long serialVersionUID = 1L;
 	
-	public static final int WIDTH = 160;
+	public static final int WIDTH = 128;
 	public static final int HEIGHT = WIDTH/12*9;
-	public static final int SCALE = 6;
+	public static final int SCALE = 8;
 	public static final String NAME = "Tower Defense";
 
 	private static Level level;
@@ -56,24 +56,24 @@ public class Application extends Canvas implements Runnable
 		frame.add(this, BorderLayout.CENTER);
 		frame.pack();
 		
-		Level.spawnEnemy(0, Level.enemySpawnPoint.getTileX(),Level.enemySpawnPoint.getTileY());
+		Level.spawnEnemy(0, Level.enemySpawnPoint.getX(),Level.enemySpawnPoint.getY());
 	}
 	
 	/* START setters and getters */
-
-	public Application instance()
-	{
-		return instance;
-	}
 	
-	public boolean Playing()
+	public static boolean Playing()
 	{
 		return playing;
 	}
 	
-	public void setPlaying(boolean playing)
+	public static Application getInstance()
 	{
-		this.playing = playing;
+		return instance;
+	}
+	
+	public static void setPlaying(boolean play)
+	{
+		playing = play;
 	}
 	
 	public static Level getLevel()
@@ -148,28 +148,7 @@ public class Application extends Canvas implements Runnable
 	{
 		tickCount++;
 		
-		Level.getPlayer().tick();
-		
-		for(AnimatedTile i : AnimatedTile.animatedTiles)
-		{
-			i.tick();
-		}
-		
-		for(Enemy e : Level.enemies)
-		{
-			e.tick();
-		}
-		
-		for(Tower t : Level.towers)
-		{
-			t.tick();
-		}
-		
-		for(Enemy e : Level.enemies)
-		{
-			e.walk();
-		}
-		
+		Level.tick();
 	}
 	
 	public void render()
@@ -186,19 +165,7 @@ public class Application extends Canvas implements Runnable
 		g.setColor(Color.BLACK);
 		g.fillRect(0, 0, getWidth(), getHeight());
 		
-		Level.getPlayer().render(g);
-		
 		Level.render(g);
-		
-		for(Enemy e : Level.enemies)
-		{
-			e.render(g);
-		}
-		
-		for(Tower t : Level.towers)
-		{
-			t.render(g);
-		}
 		
 		g.dispose();
 		bs.show();

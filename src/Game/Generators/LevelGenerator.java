@@ -71,8 +71,8 @@ public class LevelGenerator
 		int turnRandomizer = generator.nextInt(6) + 4;
 		
 		Level.tiles[0][startingRoadIndex] = blockSpriteSheet.tiles[2][0];
-		Level.tiles[0][startingRoadIndex].setType(TileType.Spawn);
-		Level.enemySpawnPoint = new Position(0,startingRoadIndex*32 + 8);
+		Level.tiles[0][startingRoadIndex].setType(TileType.Road);
+		Level.enemySpawnPoint = new Position(0,startingRoadIndex*Level.tileSize);
 		
 		while(!endRoadPlaced)
 		{
@@ -149,7 +149,7 @@ public class LevelGenerator
 			
 			if(currentX >= Level.tiles.length)
 			{
-				Level.tiles[currentX-1][currentY].setType(TileType.End);
+				Level.tiles[currentX-1][currentY].setType(TileType.Road);
 				endRoadPlaced = true;
 			}
 		}

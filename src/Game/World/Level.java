@@ -55,6 +55,7 @@ public class Level
 		{
 			e.tick();
 		}
+		
 	}
 	
 	public static void render(Graphics g)
@@ -66,9 +67,19 @@ public class Level
 				g.drawImage(tiles[i][j].getImage(), i*tileSize, j*tileSize, tileSize, tileSize, null);
 			}
 		}
+		
+		for(Enemy e : enemies)
+		{
+			e.render(g);
+		}
+		
+		for(Tower t : towers)
+		{
+			t.render(g);
+		}
 	}
 	
-	public static void spawnEnemy(int id, int x, int y)
+	public static void spawnEnemy(int id, float x, float y)
 	{
 		Enemy e;
 		
@@ -76,10 +87,9 @@ public class Level
 		e.setPosition(new Position(x,y));
 		
 		addEnemy(e);
-		
 	}
 	
-	public static void spawnTower(int id, int x, int y)
+	public static void spawnTower(int id, float x, float y)
 	{
 		Tower tower;
 
@@ -89,9 +99,17 @@ public class Level
 		addTower(tower);;
 	}
 	
-	public static Tile getTileAtPos(int x, int y)
+	public static Tile getTileAtPos(float x, float y)
 	{
-		return tiles[x][y];
+		if(x < 0) x = 0;
+		if(y < 0) y = 0;
+		if(x > Application.WIDTH*Application.SCALE) x = Application.WIDTH*Application.SCALE;
+		if(y > Application.HEIGHT*Application.SCALE) y = Application.HEIGHT*Application.SCALE;
+		
+		
+		System.out.println("X: " + (int)x/tileSize + " Y:" + (int)y/tileSize);
+		System.out.println("Type: " + tiles[(int) (x/tileSize)][(int) (y/tileSize)].getType().toString());
+		return tiles[(int) (x/tileSize)][(int) (y/tileSize)];
 	}
 	
 	private static void addTower(Tower t)

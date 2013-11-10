@@ -83,11 +83,6 @@ public class Entity
 	
 	/* END setters and getters */
 	
-	public void draw(Graphics2D g2d)
-	{
-		
-	}
-	
 	public static BufferedImage LoadImage(int id)
 	{
 		BufferedImage newImage = null;
