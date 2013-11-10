@@ -14,8 +14,7 @@ public class Entity
 	protected String name;
 	protected int id;
 	protected Position position = new Position();
-	private boolean alive;
-	private BufferedImage image;
+	protected boolean alive;
 	
 	public Entity()
 	{
@@ -23,7 +22,6 @@ public class Entity
 		name = "No Name";
 		alive = true;
 		id = 0;
-		image = LoadImage(id);
 	}
 	
 	public Entity(String newName, int newId, int newX, int newY)
@@ -55,10 +53,6 @@ public class Entity
 	public Position getPosition()
 	{
 		return position;
-	}
-	public BufferedImage Image()
-	{
-		return image;
 	}
 	
 	public void setName(String newName)

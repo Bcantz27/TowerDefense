@@ -1,6 +1,9 @@
 package Game.Entity;
 
 import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.geom.AffineTransform;
+import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -81,53 +84,73 @@ public class Enemy extends Entity
 	
 	public void tick()
 	{
-		currentImage = animator.getCurrentAnimation().getCurrentFrame();
-		
-		walk();
+		if(alive)
+		{
+			walk();
+		}
 	}
 	
 	public void render(Graphics g)
 	{
-		if(currentImage == null)
+		currentImage = animator.getCurrentAnimation().getCurrentFrame();
+        
+		if(dir.equals(Direction.North))
 		{
-			currentImage = animator.getCurrentAnimation().getCurrentFrame();
+			currentImage = Tile.rotate(currentImage, -90);
+		}
+		else if(dir.equals(Direction.South))
+		{
+			currentImage = Tile.rotate(currentImage, 90);
 		}
 		
-		g.drawImage(currentImage, (int)position.getX(), (int)position.getY(), currentImage.getWidth(), currentImage.getHeight(), null);
+		if(alive)
+		{
+			g.drawImage(currentImage, (int)position.getX() + Level.tileSize/4, (int)position.getY() + Level.tileSize/4, currentImage.getWidth(), currentImage.getHeight(), null);
+		}
 	}
 	
 	public void walk()
 	{
-		
+		animator.playAnimation("Walk",true);
 		if(dir == Direction.North)
 		{
-			if(Level.getTileAtPos(position.getX(), (position.getY() - offset)).getType().equals(Tile.TileType.Road))
+			if((Level.getTileAtPos(position.getX(), (position.getY() - offset)).getType().equals(Tile.TileType.Road) || position.getY()%Level.tileSize != 0) && position.getY() > 1)
 			{
-				System.out.println("Move North");
 				position.shiftPosition(0, -speedModifer*speed);
 			}
 			else
 			{
-				System.out.println("Turn East");
 				dir = Direction.East;
 			}
 		}
 		else if(dir == Direction.East)
 		{
-			if(Level.getTileAtPos((position.getX() + offset), position.getY()).getType().equals(Tile.TileType.Road))
+			if(position.getTileX() >= 31)
+			{
+				Level.getPlayer().removeLive();
+				destroy();
+				return;
+			}
+			if(Level.getTileAtPos((position.getX() + offset), position.getY()).getType().equals(Tile.TileType.Road) && position.getY() < Application.WIDTH*Application.SCALE - 1)
 			{
 				System.out.println("Move east");
 				position.shiftPosition(speedModifer*speed, 0);
 			}
 			else
 			{
-				System.out.println("Turn North");
-				dir = Direction.North;
+				if(Level.getTileAtPos(position.getX(), (position.getY() + offset)).getType().equals(Tile.TileType.Road))
+				{
+					dir = Direction.South;
+				}
+				else
+				{
+					dir = Direction.North;
+				}
 			}
 		}
 		else if(dir == Direction.South)
 		{
-			if(Level.getTileAtPos(position.getX(), (position.getY() + offset)).getType().equals(Tile.TileType.Road))
+			if((Level.getTileAtPos(position.getX(), (position.getY() + offset)).getType().equals(Tile.TileType.Road) || position.getY()%Level.tileSize != 0) && position.getY() < Application.HEIGHT*Application.SCALE - 1)
 			{
 				System.out.println("Move south");
 				position.shiftPosition(0, speedModifer*speed);
@@ -135,7 +158,7 @@ public class Enemy extends Entity
 			else
 			{
 				System.out.println("Turn West");
-				dir = Direction.West;
+				dir = Direction.East;
 			}
 		}
 		else if(dir == Direction.West)
@@ -151,6 +174,12 @@ public class Enemy extends Entity
 				dir = Direction.East;
 			}
 		}
+	}
+	
+	public void destroy()
+	{
+		alive = false;
+		Level.removeEnemy(this);
 	}
 	
 	public enum Direction

@@ -55,7 +55,6 @@ public class Level
 		{
 			e.tick();
 		}
-		
 	}
 	
 	public static void render(Graphics g)
@@ -112,13 +111,23 @@ public class Level
 		return tiles[(int) (x/tileSize)][(int) (y/tileSize)];
 	}
 	
-	private static void addTower(Tower t)
+	public static void addTower(Tower t)
 	{
 		towers.add(t);
 	}
 	
-	private static void addEnemy(Enemy e)
+	public static void addEnemy(Enemy e)
 	{
 		enemies.add(e);
+	}
+	
+	public static void removeTower(Tower t)
+	{
+		towers.remove(t);
+	}
+	
+	public static void removeEnemy(Enemy e)
+	{
+		enemies.remove(e);
 	}
 }

@@ -51,6 +51,17 @@ public class Player extends Entity
 	
 	/* END setters and getters */
 	
+	public void removeLive()
+	{
+		if(lives > 1)
+			lives--;
+		else
+		{
+			lives--;
+			alive = false;
+		}
+	}
+	
 	public void tick()
 	{
 

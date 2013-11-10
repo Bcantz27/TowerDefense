@@ -148,6 +148,11 @@ public class Application extends Canvas implements Runnable
 	{
 		tickCount++;
 		
+		for(AnimatedTile at : AnimatedTile.animatedTiles)
+		{
+			at.tick();
+		}
+		
 		Level.tick();
 	}
 	
