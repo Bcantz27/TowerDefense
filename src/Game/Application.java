@@ -9,7 +9,11 @@ import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferInt;
 
+import javax.swing.JButton;
+import javax.swing.JComponent;
 import javax.swing.JFrame;
+import javax.swing.JLayeredPane;
+import javax.swing.JPanel;
 
 import Game.Entity.Enemy;
 import Game.Entity.Player;
@@ -17,6 +21,7 @@ import Game.Entity.Tower;
 import Game.Gfx.AnimatedTile;
 import Game.Gfx.Animation;
 import Game.Gfx.SpriteSheet;
+import Game.Gui.MainPane;
 import Game.World.Level;
 
 public class Application extends Canvas implements Runnable
@@ -45,18 +50,20 @@ public class Application extends Canvas implements Runnable
 		setPreferredSize(new Dimension(WIDTH*SCALE, HEIGHT*SCALE));
 		
 		JFrame frame = new JFrame(NAME);
+        JComponent newContentPane = new MainPane(this);
+        newContentPane.setOpaque(true); //content panes must be opaque
+        frame.setContentPane(newContentPane);
+		
+		frame.setMinimumSize(new Dimension(WIDTH*SCALE, HEIGHT*SCALE));
+		frame.setMaximumSize(new Dimension(WIDTH*SCALE, HEIGHT*SCALE));
+		frame.setPreferredSize(new Dimension(WIDTH*SCALE, HEIGHT*SCALE));
 		
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setVisible(true);
 		frame.setResizable(false);
 		frame.setLocationRelativeTo(null);
-		
-		frame.setLayout(new BorderLayout());
-		
-		frame.add(this, BorderLayout.CENTER);
+
 		frame.pack();
-		
-		Level.spawnEnemy(0, Level.enemySpawnPoint.getX(),Level.enemySpawnPoint.getY());
 	}
 	
 	/* START setters and getters */

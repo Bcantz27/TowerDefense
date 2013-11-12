@@ -54,10 +54,14 @@ public class Player extends Entity
 	public void removeLive()
 	{
 		if(lives > 1)
+		{
 			lives--;
+			System.out.println("Player lost a life.");
+		}
 		else
 		{
 			lives--;
+			System.out.println("Player has Lost.");
 			alive = false;
 		}
 	}

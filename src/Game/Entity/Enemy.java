@@ -75,9 +75,19 @@ public class Enemy extends Entity
 		this.health = health;
 	}
 	
+	public void setWalking(boolean walking)
+	{
+		this.walking = walking;
+	}
+	
 	public Animator getAnimator()
 	{
 		return animator;
+	}
+	
+	public boolean getWalking()
+	{
+		return walking;
 	}
 	
 	/* END setters and getters */
@@ -86,7 +96,8 @@ public class Enemy extends Entity
 	{
 		if(alive)
 		{
-			walk();
+			if(walking)
+				walk();
 		}
 	}
 	
@@ -125,7 +136,7 @@ public class Enemy extends Entity
 		}
 		else if(dir == Direction.East)
 		{
-			if(position.getTileX() >= 31)
+			if(position.getTileX() >= 31 && (!Level.getTileAtPos(position.getX(), (position.getY() + offset)).getType().equals(Tile.TileType.Road) || !Level.getTileAtPos(position.getX(), (position.getY() - offset)).getType().equals(Tile.TileType.Road)))
 			{
 				Level.getPlayer().removeLive();
 				destroy();
@@ -133,7 +144,6 @@ public class Enemy extends Entity
 			}
 			if(Level.getTileAtPos((position.getX() + offset), position.getY()).getType().equals(Tile.TileType.Road) && position.getY() < Application.WIDTH*Application.SCALE - 1)
 			{
-				System.out.println("Move east");
 				position.shiftPosition(speedModifer*speed, 0);
 			}
 			else
@@ -152,28 +162,18 @@ public class Enemy extends Entity
 		{
 			if((Level.getTileAtPos(position.getX(), (position.getY() + offset)).getType().equals(Tile.TileType.Road) || position.getY()%Level.tileSize != 0) && position.getY() < Application.HEIGHT*Application.SCALE - 1)
 			{
-				System.out.println("Move south");
 				position.shiftPosition(0, speedModifer*speed);
 			}
 			else
 			{
-				System.out.println("Turn West");
 				dir = Direction.East;
 			}
 		}
-		else if(dir == Direction.West)
-		{
-			if(Level.getTileAtPos((position.getX() - offset), position.getY()).getType().equals(Tile.TileType.Road))
-			{
-				System.out.println("Move west");
-				position.shiftPosition(-speedModifer*speed, 0);
-			}
-			else
-			{
-				System.out.println("Turn East");
-				dir = Direction.East;
-			}
-		}
+	}
+	
+	public static Enemy getEnemyById(int id)
+	{
+		return PremadeEnemies.values()[id].getEnemy();
 	}
 	
 	public void destroy()
@@ -199,6 +199,16 @@ public class Enemy extends Entity
 				e = new Enemy("Rat", 0, 0, 0, 10, 2);
 				e.animator.loadAnimation("Idle", "/Animations/Mobs/Rat/idle.png", 0);
 				e.animator.loadAnimation("Walk","/Animations/Mobs/Rat/walk.png", 500);
+				return e;
+			}
+		},
+		Turtle{
+			@Override
+			public Enemy getEnemy()
+			{
+				e = new Enemy("Turtle", 0, 0, 0, 30, 1f);
+				e.animator.loadAnimation("Idle", "/Animations/Mobs/Turtle/idle.png", 0);
+				e.animator.loadAnimation("Walk","/Animations/Mobs/Turtle/walk.png", 1000);
 				return e;
 			}
 		};

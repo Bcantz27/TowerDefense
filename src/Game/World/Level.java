@@ -24,13 +24,23 @@ public class Level
 	public static Position enemySpawnPoint;
 	public static Tile[][] tiles;
 	public static Wave[] waves;
+	public static List<Enemy> enemiesToRemove = new ArrayList<Enemy>();
+	public static int currentWave;
+	public static int maxWave;
 	
 	public Level(String name)
 	{
+		currentWave = 0;
+		maxWave = 0;
 		player = new Player(name);
 		enemySpawnPoint = new Position(0,0);
 		tiles = new Tile[(Application.WIDTH*Application.SCALE)/tileSize][((Application.HEIGHT*Application.SCALE)/tileSize) + 1];
 		LevelGenerator.generateLevel();
+		
+		waves = new Wave[10];
+		addWave(new Wave(0,10));
+		addWave(new Wave(1,3));
+		
 	}
 	
 	/* START setters and getters */
@@ -45,6 +55,8 @@ public class Level
 	public static void tick()
 	{
 		player.tick();
+		if(currentWave >= 0 && currentWave < maxWave)
+			waves[currentWave].tick();
 		
 		for(Tower t : towers)
 		{
@@ -55,6 +67,13 @@ public class Level
 		{
 			e.tick();
 		}
+		
+		for(Enemy e : enemiesToRemove)
+		{
+			enemies.remove(e);
+		}
+		
+		enemiesToRemove = new ArrayList<Enemy>();
 	}
 	
 	public static void render(Graphics g)
@@ -78,14 +97,69 @@ public class Level
 		}
 	}
 	
-	public static void spawnEnemy(int id, float x, float y)
+	public static void startNextWave()
+	{
+		if(currentWave < maxWave)
+		{
+			if(!waves[currentWave].getStarted())
+			{
+				System.out.println("Starting Wave " + (currentWave+1) + " out of " + maxWave);
+				waves[currentWave].start();
+			}
+		}
+		else
+		{
+			currentWave = maxWave;
+		}
+	}
+	
+	public static void addWave(Wave w)
+	{
+		waves[maxWave] = w;
+		maxWave++;
+	}
+	
+	public static void spawnEnemy(int id)
 	{
 		Enemy e;
 		
 		e = PremadeEnemies.values()[id].getEnemy();
-		e.setPosition(new Position(x,y));
+		e.setWalking(true);
+		e.setPosition(new Position(Level.enemySpawnPoint.getX(),Level.enemySpawnPoint.getY()));
 		
 		addEnemy(e);
+	}
+	
+	public static void spawnEnemy(Enemy e)
+	{
+		e.setWalking(true);
+		e.setPosition(new Position(Level.enemySpawnPoint.getX(),Level.enemySpawnPoint.getY()));
+		addEnemy(e);
+	}
+	
+	public static void spawnEnemy(int id, int amount)
+	{
+		Enemy e = null;
+		
+		for(int i = 0; i < amount; i++)
+		{
+			e = PremadeEnemies.values()[id].getEnemy();
+			e.setWalking(true);
+			e.setPosition(new Position(Level.enemySpawnPoint.getX(),Level.enemySpawnPoint.getY()));
+			
+			if(e != null)
+				addEnemy(e);
+		}
+	}
+	
+	public static void spawnEnemy(Enemy e, int amount)
+	{
+		for(int i = 0; i < amount; i++)
+		{
+			e.setPosition(new Position(Level.enemySpawnPoint.getX(),Level.enemySpawnPoint.getY()));
+			e.setWalking(true);
+			addEnemy(e);
+		}
 	}
 	
 	public static void spawnTower(int id, float x, float y)
@@ -106,8 +180,8 @@ public class Level
 		if(y > Application.HEIGHT*Application.SCALE) y = Application.HEIGHT*Application.SCALE;
 		
 		
-		System.out.println("X: " + (int)x/tileSize + " Y:" + (int)y/tileSize);
-		System.out.println("Type: " + tiles[(int) (x/tileSize)][(int) (y/tileSize)].getType().toString());
+		//System.out.println("X: " + (int)x/tileSize + " Y:" + (int)y/tileSize);
+		//System.out.println("Type: " + tiles[(int) (x/tileSize)][(int) (y/tileSize)].getType().toString());
 		return tiles[(int) (x/tileSize)][(int) (y/tileSize)];
 	}
 	
@@ -123,11 +197,11 @@ public class Level
 	
 	public static void removeTower(Tower t)
 	{
-		towers.remove(t);
+		
 	}
 	
 	public static void removeEnemy(Enemy e)
 	{
-		enemies.remove(e);
+		enemiesToRemove.add(e);
 	}
 }
