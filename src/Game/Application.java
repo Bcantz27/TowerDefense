@@ -1,37 +1,34 @@
 package Game;
 
 import java.awt.BorderLayout;
+import java.awt.Button;
 import java.awt.Canvas;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.image.BufferStrategy;
-import java.awt.image.BufferedImage;
-import java.awt.image.DataBufferInt;
 
-import javax.swing.JButton;
-import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLayeredPane;
-import javax.swing.JPanel;
 
-import Game.Entity.Enemy;
-import Game.Entity.Player;
-import Game.Entity.Tower;
+import com.sun.awt.AWTUtilities;
+
 import Game.Gfx.AnimatedTile;
-import Game.Gfx.Animation;
-import Game.Gfx.SpriteSheet;
-import Game.Gui.MainPane;
+import Game.Gui.GamePanel;
+import Game.Gui.Gui;
 import Game.World.Level;
 
-public class Application extends Canvas implements Runnable
+public class Application implements Runnable
 {
 	private static final long serialVersionUID = 1L;
 	
-	public static final int WIDTH = 128;
-	public static final int HEIGHT = WIDTH/12*9;
-	public static final int SCALE = 8;
+	private static final int WIDTH = 128;
+	private static final int HEIGHT = WIDTH/12*9;
+	private static final int SCALE = 8;
 	public static final String NAME = "Tower Defense";
+	
+	public static Gui myGui = new Gui();
+	public static GamePanel myGame = new GamePanel();
 
 	private static Level level;
 	private static Application instance;
@@ -45,24 +42,31 @@ public class Application extends Canvas implements Runnable
 		instance = this;
 		playing = true;
 		
-		setMinimumSize(new Dimension(WIDTH*SCALE, HEIGHT*SCALE));
-		setMaximumSize(new Dimension(WIDTH*SCALE, HEIGHT*SCALE));
-		setPreferredSize(new Dimension(WIDTH*SCALE, HEIGHT*SCALE));
-		
 		JFrame frame = new JFrame(NAME);
-        JComponent newContentPane = new MainPane(this);
-        newContentPane.setOpaque(true); //content panes must be opaque
-        frame.setContentPane(newContentPane);
+		JLayeredPane jlp = new JLayeredPane();
+		
+		frame.add(jlp);
 		
 		frame.setMinimumSize(new Dimension(WIDTH*SCALE, HEIGHT*SCALE));
 		frame.setMaximumSize(new Dimension(WIDTH*SCALE, HEIGHT*SCALE));
 		frame.setPreferredSize(new Dimension(WIDTH*SCALE, HEIGHT*SCALE));
 		
+		jlp.setOpaque(false);
+		jlp.setPreferredSize(new Dimension(WIDTH*SCALE,HEIGHT*SCALE));
+		myGui.setPreferredSize(new Dimension(WIDTH*SCALE,HEIGHT*SCALE));
+		myGame.setPreferredSize(new Dimension(WIDTH*SCALE,HEIGHT*SCALE));
+		
+		jlp.add(myGame, JLayeredPane.DEFAULT_LAYER);
+		jlp.add(myGui, JLayeredPane.PALETTE_LAYER);
+		
+		myGui.setBounds(0,0,WIDTH*SCALE,HEIGHT*SCALE);
+		myGame.setBounds(0,0,WIDTH*SCALE,HEIGHT*SCALE);
+		
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.setVisible(true);
 		frame.setResizable(false);
 		frame.setLocationRelativeTo(null);
-
+		
+		frame.setVisible(true);
 		frame.pack();
 	}
 	
@@ -76,6 +80,16 @@ public class Application extends Canvas implements Runnable
 	public static Application getInstance()
 	{
 		return instance;
+	}
+	
+	public static int getWidth()
+	{
+		return WIDTH*SCALE;
+	}
+	
+	public static int getHeight()
+	{
+		return HEIGHT*SCALE;
 	}
 	
 	public static void setPlaying(boolean play)
@@ -101,6 +115,7 @@ public class Application extends Canvas implements Runnable
 		
 	}
 	
+	@Override
 	public void run() 
 	{
 		long lastTime = System.nanoTime();
@@ -138,7 +153,7 @@ public class Application extends Canvas implements Runnable
 			if(shouldRender)
 			{
 				frames++;
-				render();
+				myGame.render();
 			}
 			
 			if(System.currentTimeMillis() - lastTimer >= 1000)
@@ -163,6 +178,7 @@ public class Application extends Canvas implements Runnable
 		Level.tick();
 	}
 	
+	/*
 	public void render()
 	{
 		BufferStrategy bs = getBufferStrategy();
@@ -182,4 +198,5 @@ public class Application extends Canvas implements Runnable
 		g.dispose();
 		bs.show();
 	}
+	*/
 }

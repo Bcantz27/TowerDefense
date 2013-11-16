@@ -13,6 +13,7 @@ import Game.Entity.Tower.PremadeTowers;
 import Game.Generators.LevelGenerator;
 import Game.Gfx.SpriteSheet;
 import Game.Gfx.Tile;
+import Game.Gui.Shop;
 
 public class Level 
 {
@@ -28,25 +29,32 @@ public class Level
 	public static int currentWave;
 	public static int maxWave;
 	
+	private boolean towerSelected;
+	
 	public Level(String name)
 	{
+		towerSelected = false;
 		currentWave = 0;
 		maxWave = 0;
 		player = new Player(name);
 		enemySpawnPoint = new Position(0,0);
-		tiles = new Tile[(Application.WIDTH*Application.SCALE)/tileSize][((Application.HEIGHT*Application.SCALE)/tileSize) + 1];
+		tiles = new Tile[(Application.getWidth())/tileSize][((Application.getHeight())/tileSize) + 1];
 		LevelGenerator.generateLevel();
 		
 		waves = new Wave[10];
 		addWave(new Wave(0,10));
 		addWave(new Wave(1,3));
-		
 	}
 	
 	/* START setters and getters */
 	
 	public static Player getPlayer()
 	{
+		if(player == null)
+		{
+			player = new Player("Derp");
+		}
+		
 		return player;
 	}
 	
@@ -84,6 +92,11 @@ public class Level
 			{
 				g.drawImage(tiles[i][j].getImage(), i*tileSize, j*tileSize, tileSize, tileSize, null);
 			}
+		}
+		
+		if(Shop.selectedTower != null)
+		{
+			Shop.render(g);
 		}
 		
 		for(Enemy e : enemies)
@@ -172,17 +185,33 @@ public class Level
 		addTower(tower);;
 	}
 	
+	public static void clearLevel()
+	{
+		for(Enemy e : enemies)
+		{
+			e.destroy();
+		}
+		
+		enemies = new ArrayList<Enemy>();
+		towers = new ArrayList<Tower>();
+	}
+	
 	public static Tile getTileAtPos(float x, float y)
 	{
 		if(x < 0) x = 0;
 		if(y < 0) y = 0;
-		if(x > Application.WIDTH*Application.SCALE) x = Application.WIDTH*Application.SCALE;
-		if(y > Application.HEIGHT*Application.SCALE) y = Application.HEIGHT*Application.SCALE;
+		if(x > Application.getWidth()) x = Application.getWidth();
+		if(y > Application.getHeight()) y = Application.getHeight();
 		
 		
 		//System.out.println("X: " + (int)x/tileSize + " Y:" + (int)y/tileSize);
 		//System.out.println("Type: " + tiles[(int) (x/tileSize)][(int) (y/tileSize)].getType().toString());
 		return tiles[(int) (x/tileSize)][(int) (y/tileSize)];
+	}
+	
+	public static void towerInShopSelected()
+	{
+		
 	}
 	
 	public static void addTower(Tower t)

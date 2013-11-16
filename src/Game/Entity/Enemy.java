@@ -142,7 +142,7 @@ public class Enemy extends Entity
 				destroy();
 				return;
 			}
-			if(Level.getTileAtPos((position.getX() + offset), position.getY()).getType().equals(Tile.TileType.Road) && position.getY() < Application.WIDTH*Application.SCALE - 1)
+			if(Level.getTileAtPos((position.getX() + offset), position.getY()).getType().equals(Tile.TileType.Road) && position.getY() < Application.getWidth() - 1)
 			{
 				position.shiftPosition(speedModifer*speed, 0);
 			}
@@ -160,7 +160,7 @@ public class Enemy extends Entity
 		}
 		else if(dir == Direction.South)
 		{
-			if((Level.getTileAtPos(position.getX(), (position.getY() + offset)).getType().equals(Tile.TileType.Road) || position.getY()%Level.tileSize != 0) && position.getY() < Application.HEIGHT*Application.SCALE - 1)
+			if((Level.getTileAtPos(position.getX(), (position.getY() + offset)).getType().equals(Tile.TileType.Road) || position.getY()%Level.tileSize != 0) && position.getY() < Application.getHeight() - 1)
 			{
 				position.shiftPosition(0, speedModifer*speed);
 			}
@@ -196,7 +196,7 @@ public class Enemy extends Entity
 			@Override
 			public Enemy getEnemy()
 			{
-				e = new Enemy("Rat", 0, 0, 0, 10, 2);
+				e = new Enemy("Rat", 0, 0, 0, 10, 2f);
 				e.animator.loadAnimation("Idle", "/Animations/Mobs/Rat/idle.png", 0);
 				e.animator.loadAnimation("Walk","/Animations/Mobs/Rat/walk.png", 500);
 				return e;

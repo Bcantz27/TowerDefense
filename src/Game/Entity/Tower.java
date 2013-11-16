@@ -2,10 +2,14 @@ package Game.Entity;
 
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.imageio.ImageIO;
+
 import Game.Application;
+import Game.Gfx.AnimatedTile;
 import Game.Gfx.Animation;
 import Game.World.Level;
 import Game.World.Position;
@@ -32,6 +36,12 @@ public class Tower extends Entity
 		this.damageType = type;
 		this.range = range;
 		this.attackSpeed = attackSpeed;
+
+		try {
+			currentImage = ImageIO.read(AnimatedTile.class.getResourceAsStream("/Towers/archerI.png"));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	/* START setters and getters */
@@ -106,6 +116,11 @@ public class Tower extends Entity
 	public void render(Graphics g)
 	{
 		g.drawImage(currentImage, position.getTileX(), position.getTileY(), currentImage.getWidth(), currentImage.getHeight(), null);
+	}
+	
+	public static Tower getTowerById(int id)
+	{
+		return PremadeTowers.values()[id].getTower();
 	}
 	
 	public static enum PremadeTowers

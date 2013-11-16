@@ -1,20 +1,20 @@
 package Game.Entity;
 
+import Game.Gui.Gui;
+
 public class Player extends Entity 
 {
-	private static final int STARTING_LIVES = 100;
-	private static final int STARTING_GOLD = 500;
+	public static final int STARTING_LIVES = 100;
+	public static final int STARTING_GOLD = 500;
 	
 	private int lives;
 	private int gold;
-	private int wave;
 	
 	public Player(String newName) 
 	{
 		super(newName, 0, 0, 0);
 		lives = STARTING_LIVES;
 		gold = STARTING_GOLD;
-		wave = 1;
 	}
 	
 	/* START setters and getters */
@@ -29,24 +29,16 @@ public class Player extends Entity
 		return gold;
 	}
 	
-	public int getWave()
-	{
-		return wave;
-	}
-	
 	public void setLives(int lives)
 	{
 		this.lives = lives;
+		notifyLivesChanged();
 	}
 	
 	public void setGold(int gold)
 	{
 		this.gold = gold;
-	}
-	
-	public void setWave(int wave)
-	{
-		this.wave = wave;
+		notifyGoldChanged();
 	}
 	
 	/* END setters and getters */
@@ -64,11 +56,22 @@ public class Player extends Entity
 			System.out.println("Player has Lost.");
 			alive = false;
 		}
+		notifyLivesChanged();
 	}
 	
 	public void tick()
 	{
 
+	}
+	
+	public void notifyGoldChanged()
+	{
+		Gui.goldAmountChanged();
+	}
+	
+	public void notifyLivesChanged()
+	{
+		Gui.livesAmountChanged();
 	}
 	
 	

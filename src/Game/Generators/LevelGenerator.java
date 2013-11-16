@@ -2,8 +2,12 @@ package Game.Generators;
 
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
 import java.util.Random;
 
+import Game.Application;
+import Game.Entity.Enemy;
+import Game.Entity.Tower;
 import Game.Gfx.AnimatedTile;
 import Game.Gfx.SpriteSheet;
 import Game.Gfx.Tile.TileType;
@@ -13,21 +17,20 @@ import Game.World.Position;
 public class LevelGenerator 
 {
 	public static final int flowerTileChance = 10;			//Higher the number the less chance
+	public static final int maxRoadLength = 6;			
+	public static final int minRoadLength = 3;		
 	
 	public static SpriteSheet blockSpriteSheet = new SpriteSheet("/SpriteSheet.png", 16);
-	
-	public static BufferedImage rotate(BufferedImage img, int rotation) 
-    {
-		int w = img.getWidth();  
-		int h = img.getHeight();  
-		BufferedImage newImage = new BufferedImage(w, h, img.getType());
-	    Graphics2D g2 = newImage.createGraphics();
-	    g2.rotate(Math.toRadians(rotation), w/2, h/2);  
-	    g2.drawImage(img,null,0,0);
-		return newImage;  
-    }
+	private static Direction dir;
 	
 	public static void generateLevel()
+	{
+		Level.clearLevel();
+		createBaseLayer();
+		createRoads();
+	}
+	
+	private static void createBaseLayer()
 	{
 		Random generator = new Random();
 		int randomNumber = generator.nextInt(100);
@@ -52,106 +55,164 @@ public class LevelGenerator
 				randomNumber = generator.nextInt(100);
 			}
 		}
-		
-		createRoads();
 	}
 	
 	private static void createRoads()
 	{
 		boolean endRoadPlaced = false;
 		Random generator = new Random();
-		int startingRoadIndex = generator.nextInt(Level.tiles[0].length - 2) + 1;
+		int startingRoadYIndex = Level.tiles[0].length/2;
 		
 		int currentX = 0;
-		int currentY = startingRoadIndex;
-		int direction = 1; // 0 = north 1 = east 2 = south 3 = west
+		int currentY = startingRoadYIndex;
 		
-		boolean canTurn = true;
+		boolean shouldTurn = true;
 		int counterSinceLastTurn = 0;
-		int turnRandomizer = generator.nextInt(6) + 4;
+		int roadLengthRandomizer = 2;
+		int directionChooser = generator.nextInt(2);
 		
-		Level.tiles[0][startingRoadIndex] = blockSpriteSheet.tiles[2][0];
-		Level.tiles[0][startingRoadIndex].setType(TileType.Road);
-		Level.enemySpawnPoint = new Position(0,startingRoadIndex*Level.tileSize);
+		dir = Direction.East;
+		
+		Level.tiles[0][startingRoadYIndex] = blockSpriteSheet.tiles[2][0];
+		Level.tiles[0][startingRoadYIndex].setType(TileType.Road);
+		Level.enemySpawnPoint = new Position(0,startingRoadYIndex*Level.tileSize);
 		
 		while(!endRoadPlaced)
-		{
-			if(currentX > 2 && canTurn)
+		{		
+			if(currentX >= Application.getWidth()/Level.tileSize - 1)
 			{
-				canTurn = false;
-				
-				switch(direction)
+				currentX = Application.getWidth()/Level.tileSize - 1;
+				Level.tiles[currentX][currentY] = blockSpriteSheet.tiles[2][0];
+				Level.tiles[currentX][currentY].setType(TileType.Road);
+				endRoadPlaced = true;
+				break;
+			}
+			else if(currentX < 0)
+			{
+				currentX = 0;
+			}
+			
+			if(currentY >= Application.getHeight()/Level.tileSize - 3)
+			{
+				currentY = Application.getHeight()/Level.tileSize - 3;
+			}
+			else if(currentY < 0)
+			{
+				currentY = 0;
+			}
+			
+			if(dir == Direction.North)
+			{
+				if(counterSinceLastTurn < roadLengthRandomizer)
 				{
-					case 0:
+					Level.tiles[currentX][currentY] = blockSpriteSheet.tiles[4][0];
+					Level.tiles[currentX][currentY].setType(TileType.Road);
+					currentY--;
+					counterSinceLastTurn++;
+					if(currentY <= 0)
+					{
 						Level.tiles[currentX][currentY] = blockSpriteSheet.tiles[6][0];
 						Level.tiles[currentX][currentY].setType(TileType.Road);
 						currentX++;
-						direction = 1;
-						break;
-					case 1:
-						if(currentY <= 5)
+						counterSinceLastTurn = 0;
+						roadLengthRandomizer = generator.nextInt(maxRoadLength) + minRoadLength;
+						dir = Direction.East;
+					}
+				}
+				else
+				{
+					Level.tiles[currentX][currentY] = blockSpriteSheet.tiles[6][0];
+					Level.tiles[currentX][currentY].setType(TileType.Road);
+					currentX++;
+					counterSinceLastTurn = 0;
+					roadLengthRandomizer = generator.nextInt(maxRoadLength) + minRoadLength;
+					dir = Direction.East;
+				}
+			}
+			else if(dir == Direction.East)
+			{
+				if(counterSinceLastTurn < roadLengthRandomizer)
+				{
+					Level.tiles[currentX][currentY] = blockSpriteSheet.tiles[2][0];
+					Level.tiles[currentX][currentY].setType(TileType.Road);
+					currentX++;
+					counterSinceLastTurn++;
+				}
+				else
+				{
+					counterSinceLastTurn = 0;
+					roadLengthRandomizer = generator.nextInt(maxRoadLength) + minRoadLength;
+					if(currentY >= Application.getHeight()/Level.tileSize - 3)
+					{
+						dir = Direction.North;
+						Level.tiles[currentX][currentY] = blockSpriteSheet.tiles[5][0];
+						Level.tiles[currentX][currentY].setType(TileType.Road);
+						currentY--;
+					}
+					else if(currentY <= 0)
+					{
+						dir = Direction.South;
+						Level.tiles[currentX][currentY] = blockSpriteSheet.tiles[3][0];
+						Level.tiles[currentX][currentY].setType(TileType.Road);
+						currentY++;
+					}
+					else
+					{
+						if(directionChooser == 1)	// North
 						{
-							Level.tiles[currentX][currentY] = blockSpriteSheet.tiles[3][0];
-							Level.tiles[currentX][currentY].setType(TileType.Road);
-							currentY++;
-							direction = 2;
-						}
-						else
-						{
+							directionChooser = generator.nextInt(2);
+							dir = Direction.North;
 							Level.tiles[currentX][currentY] = blockSpriteSheet.tiles[5][0];
 							Level.tiles[currentX][currentY].setType(TileType.Road);
 							currentY--;
-							direction = 0;
 						}
-						break;
-					case 2:
+						else						//South
+						{
+							directionChooser = generator.nextInt(2);
+							dir = Direction.South;
+							Level.tiles[currentX][currentY] = blockSpriteSheet.tiles[3][0];
+							Level.tiles[currentX][currentY].setType(TileType.Road);
+							currentY++;
+						}
+					}
+				}
+			}
+			else if(dir == Direction.South)
+			{
+				if(counterSinceLastTurn < roadLengthRandomizer)
+				{
+					Level.tiles[currentX][currentY] = blockSpriteSheet.tiles[4][0];
+					Level.tiles[currentX][currentY].setType(TileType.Road);
+					currentY++;
+					counterSinceLastTurn++;
+					if(currentY >= Application.getHeight()/Level.tileSize - 3)
+					{
 						Level.tiles[currentX][currentY] = blockSpriteSheet.tiles[7][0];
 						Level.tiles[currentX][currentY].setType(TileType.Road);
 						currentX++;
-						direction = 1;
-						break;
+						counterSinceLastTurn = 0;
+						roadLengthRandomizer = generator.nextInt(maxRoadLength) + minRoadLength;
+						dir = Direction.East;
+					}
 				}
-			}
-			else
-			{
-				switch(direction)
+				else
 				{
-					case 0:
-						Level.tiles[currentX][currentY] = blockSpriteSheet.tiles[4][0];
-						Level.tiles[currentX][currentY].setType(TileType.Road);
-						currentY--;
-						break;
-					case 1:
-						Level.tiles[currentX][currentY] = blockSpriteSheet.tiles[2][0];
-						Level.tiles[currentX][currentY].setType(TileType.Road);
-						currentX++;
-						break;
-					case 2:
-						Level.tiles[currentX][currentY] = blockSpriteSheet.tiles[4][0];
-						Level.tiles[currentX][currentY].setType(TileType.Road);
-						currentY++;
-						break;
-				}
-			}
-			
-			if(!canTurn)
-			{
-				counterSinceLastTurn++;
-
-				if(counterSinceLastTurn > turnRandomizer)
-				{
+					Level.tiles[currentX][currentY] = blockSpriteSheet.tiles[7][0];
+					Level.tiles[currentX][currentY].setType(TileType.Road);
+					currentX++;
 					counterSinceLastTurn = 0;
-					canTurn = true;
+					roadLengthRandomizer = generator.nextInt(maxRoadLength) + minRoadLength;
+					dir = Direction.East;
 				}
-				
-				turnRandomizer = generator.nextInt(6) + 4;
-			}
-			
-			if(currentX >= Level.tiles.length)
-			{
-				Level.tiles[currentX-1][currentY].setType(TileType.Road);
-				endRoadPlaced = true;
 			}
 		}
+	}
+	
+	private static enum Direction
+	{
+		North,
+		South,
+		East,
+		West;
 	}
 }
